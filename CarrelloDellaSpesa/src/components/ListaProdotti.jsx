@@ -10,23 +10,43 @@ const products = [
 function ListaProdotti() {
     const [addedProducts, setAddedProducts] = useState([]);
 
+    /*     function addToCart(product) {
+            const isIncluded = addedProducts.some(p => p.name === product.name);
+            if (!isIncluded) {
+                setAddedProducts([...addedProducts, { ...product, quantity: 1 }]);
+            } else {
+                updateProductQuantity(product);
+            }
+        } */
+
     function addToCart(product) {
-        const isIncluded = addedProducts.some(p => p.name === product.name);
-        if (!isIncluded) {
+        const existingProduct = addedProducts.find(p => p.name === product.name);
+        if (!existingProduct) {
             setAddedProducts([...addedProducts, { ...product, quantity: 1 }]);
         } else {
-            updateProductQuantity(product);
+            updateProductQuantity(product.name, existingProduct.quantity + 1);
         }
     }
 
-    function updateProductQuantity(product) {
-        const updatedCart = addedProducts.map(p => {
-            if (p.name === product.name) {
-                return { ...p, quantity: p.quantity + 1 }
+
+    /*  function updateProductQuantity(product) {
+         const updatedCart = addedProducts.map(p => {
+             if (p.name === product.name) {
+                 return { ...p, quantity: p.quantity + 1 }
+             }
+             return p;
+         });
+         setAddedProducts(updatedCart);
+     } */
+
+
+    const updateProductQuantity = (name, quantity) => {
+        setAddedProducts(curr => curr.map(p => {
+            if (p.name === name) {
+                return { ...p, quantity }
             }
             return p;
-        });
-        setAddedProducts(updatedCart);
+        }))
     }
 
     function removeFromCart(product) {
